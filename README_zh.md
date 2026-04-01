@@ -193,8 +193,8 @@ MIT License © 2026 VanityH Team
 感谢以下项目为 VanityH 提供的灵感：
 
 - [HTM](https://github.com/developit/htm) - JSX 语法的替代方案
-- [DLight](https://dlight.dev) - DX-first 的 UI 渲染库
+- [DLight](https://github.com/dlight-js/dlight) - DX-first 的 UI 渲染库
 - [Hyperscript](https://github.com/hyperhype/hyperscript) - 创建 HTML 的 JavaScript
-- [SwiftUI](https://developer.apple.com/xcode/swiftui/) - 声明式 UI 框架
+- [SwiftUI](https://developer.apple.com/swiftui) - 声明式 UI 框架
 
 特别感谢所有为开源社区做出贡献的开发者！

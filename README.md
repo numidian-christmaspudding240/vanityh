@@ -193,8 +193,8 @@ MIT License © 2026 VanityH Team
 Thanks to these projects for inspiring VanityH:
 
 - [HTM](https://github.com/developit/htm) - JSX-like syntax in plain JavaScript
-- [DLight](https://dlight.dev) - DX-first UI rendering library
+- [DLight](https://github.com/dlight-js/dlight) - DX-first UI rendering library
 - [Hyperscript](https://github.com/hyperhype/hyperscript) - Create HTML with JavaScript
-- [SwiftUI](https://developer.apple.com/xcode/swiftui/) - Declarative UI framework
+- [SwiftUI](https://developer.apple.com/swiftui) - Declarative UI framework
 
 Special thanks to all developers contributing to the open source community!
