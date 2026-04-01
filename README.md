@@ -1,115 +1,117 @@
 # VanityH
 
-**极致轻量、不可变的流式渲染工厂 (Fluent Hyperscript Factory)**
+[简体中文](./README_zh.md)
 
-VanityH 并不是另一个复杂的 UI 框架，它是一个极简的 **DSL (领域特定语言) 构造器**。它通过 Proxy 与闭包逻辑，将枯燥的 `h(tag, props, children)` 调用演变为一种像 **SwiftUI** 或 **Flutter** 一样具有高度节奏感的流式开发体验。
+**An Ultra-Lightweight, Immutable Streaming Rendering Factory (Fluent Hyperscript Factory)**
 
----
-
-## ⚡️ 核心痛点：它解决了什么？
-
-在非 JSX 环境（如原生 JS/TS、脚本工具、低代码引擎）中，开发者通常面临以下困境：
-
-1.  **嵌套地狱 (Object Nesting)**：传统的 `h` 函数需要嵌套大量的对象 `{ class: '...', id: '...' }`，视觉噪音极大，括号对齐困难。
-2.  **属性污染 (Prop Mutation)**：复用一个基础标签（如 `const btn = div.class('btn')`）时，后续的修改往往会意外污染原始定义。
-3.  **心智负担 (Cognitive Load)**：在阅读代码时，属性定义、事件绑定与子节点嵌套混杂在一起，难以一眼看出 DOM 结构。
-4.  **环境依赖 (Compilation)**：JSX 需要复杂的 Babel/SWC 编译配置，无法在轻量级脚本或原生浏览器环境中开箱即用。
-
-**VanityH 通过“链式配置 + 终结符渲染”逻辑，完美化解了这些矛盾。**
+VanityH is not just another complex UI framework. It is a minimal **DSL (Domain-Specific Language) builder**. Using Proxy and closure logic, it transforms tedious `h(tag, props, children)` calls into a highly rhythmic, fluent development experience similar to **SwiftUI** or **Flutter**.
 
 ---
 
-## 🌟 核心优势：为什么选择 VanityH？
+## ⚡️ Core Pain Points: What It Solves
 
-### 1. 结构对称美学 (Structural Elegance)
+In non-JSX environments (such as vanilla JS/TS, scripting tools, low-code engines), developers commonly face these issues:
 
-VanityH 将“属性配置”与“节点挂载”在语法层面上彻底分离。属性通过`.prop()`链式表达，而节点通过`()`包裹。这种视觉上的**括号对齐**，让代码结构与生成的 HTML 结构高度映射。
+1. **Nesting Hell (Object Nesting)**: Traditional `h` functions require heavy nesting of objects like `{ class: '...', id: '...' }`, creating excessive visual noise and difficult bracket alignment.
+2. **Prop Mutation**: When reusing a base element (e.g., `const btn = div.class('btn')`), subsequent modifications often accidentally pollute the original definition.
+3. **Cognitive Load**: Property definitions, event bindings, and child node nesting are interleaved, making it hard to visualize the DOM structure at a glance.
+4. **Environment Dependencies (Compilation)**: JSX requires complex Babel/SWC setup and cannot be used out of the box in lightweight scripts or native browser environments.
+
+**VanityH resolves these conflicts perfectly with “chainable configuration + terminator rendering” logic.**
+
+---
+
+## 🌟 Key Advantages: Why VanityH?
+
+### 1. Structural Elegance
+
+VanityH cleanly separates “property configuration” from “node mounting” at the syntax level. Properties are expressed via chained `.prop()` calls, while child nodes are wrapped in `()`. This visual **bracket symmetry** creates a near-perfect mapping between code structure and the resulting HTML structure.
 
 ```js
 html.lang("en")(
   head(
     meta.charset("UTF-8")(),
     link.rel("icon").type("image/svg+xml").href("/favicon.svg")(),
-    title("VanityH - 极致优雅"),
+    title("VanityH – Elegance Redefined"),
   ),
   body(div.id("app")(), script.type("module").src("/src/main.ts")()),
 );
 ```
 
-### 2. 绝对不可变架构 (Immutable Architecture)
+### 2. Fully Immutable Architecture
 
-基于 **Copy-on-Write (写时拷贝)** 哲学。当你调用一个属性时，VanityH 绝不修改当前对象，而是通过闭包产生一个全新的“状态快照”。
+Built around the philosophy of **Copy-on-Write**. When you call a property method, VanityH never mutates the current object. Instead, it produces a brand-new “state snapshot” via closure.
 
-这确保了组件在解构和复用时的**绝对安全**：
+This guarantees **absolute safety** when destructuring and reusing components:
 
 ```js
 const baseBtn = button.class("btn");
 
-const redBtn = baseBtn.style("color: red")("红色按钮");
-const blueBtn = baseBtn.style("color: blue")("蓝色按钮"); // baseBtn 始终保持纯净
+const redBtn = baseBtn.style("color: red")("Red Button");
+const blueBtn = baseBtn.style("color: blue")("Blue Button"); // baseBtn remains pure
 ```
 
-### 3. 零魔法、全透明 (Zero Magic)
+### 3. Zero Magic, Full Transparency
 
-我们坚持“工具不应比开发者更聪明”。VanityH 不会自动处理布尔值，不设隐式转换。它只是一个**高性能的搬运工**：你链式调用的每一个键值对，都会被原封不动地传递给底层的渲染函数。
+We stand by the principle: _tools should not be smarter than developers_. VanityH does not auto-handle booleans or perform implicit conversions. It acts only as a **high-performance translator**: every chained key-value pair is passed exactly as-is to the underlying renderer.
 
-### 4. 极致轻量与兼容
+### 4. Ultra-Lightweight & Compatible
 
-- **体积**：核心逻辑约 10 行代码，压缩后几乎不占体积。
-- **兼容性**：支持 Vue, Preact, React (需要自定义 h), Snabbdom 等任何遵循 `h(tag, props, children)` 约定的框架。
-
----
-
-## 🛠 技术实现原理
-
-VanityH 内部利用了 JavaScript 的 **Proxy** 拦截 `get` 操作，并结合 **递归闭包** 来管理状态。
-
-- **配置态**：访问属性时返回一个新的 Proxy，其内部闭包持有了累加后的 `props` 对象。
-- **执行态**：当 Proxy 作为函数被调用时，它化身为“终结符”，将闭包内的 `props` 与当前传入的 `children`（自动执行 `flat(Infinity)`）一并提交给渲染引擎。
+- **Size**: Core logic in ~10 lines of code, nearly negligible when minified.
+- **Compatibility**: Works with Vue, Preact, React (with custom h), Snabbdom, and any framework following the `h(tag, props, children)` convention.
 
 ---
 
-## 📦 安装与集成
+## 🛠 Technical Implementation
+
+Internally, VanityH uses JavaScript’s **Proxy** to intercept `get` operations, paired with **recursive closures** to manage state.
+
+- **Configuration Mode**: Accessing a property returns a new Proxy whose internal closure holds the accumulated `props` object.
+- **Execution Mode**: When the Proxy is invoked as a function, it acts as a “terminator”, passing the closure-held `props` and incoming `children` (automatically flattened with `flat(Infinity)`) to the rendering engine.
+
+---
+
+## 📦 Installation & Integration
 
 ```bash
 npm install vanity-h
 ```
 
-### 快速集成 (以 Vue 为例)
+### Quick Start (Vue Example)
 
 ```typescript
 import { h } from "vue";
 import createVanity from "vanity-h";
 
-// 1. 初始化（解构出你需要的标签）
+// 1. Initialize (destructure tags you need)
 const { x, div, p, span } = createVanity(h);
 
-// 2. 包装自定义组件
+// 2. Wrap custom components
 import MyComp from "./MyComp.vue";
 
 const UI = div.class("wrapper")(
-  x(MyComp).theme("dark").onClose(handleClose)(), // 使用 x 包装器
-  p.style("font-weight: bold")("VanityH 现已就绪"),
+  x(MyComp).theme("dark").onClose(handleClose)(), // Use x wrapper
+  p.style("font-weight: bold")("VanityH is ready"),
 );
 ```
 
 ---
 
-## ⌨️ 类型支持 (TypeScript)
+## ⌨️ TypeScript Support
 
-VanityH 提供深度优化的 TS 类型推导
+VanityH provides fully optimized TypeScript type inference.
 
 ```typescript
 import createVanity, { type VanityH } from "vanity-h";
 
-// 强类型声明
+// Strongly typed
 const v: VanityH<VNode> = createVanity(h);
 ```
 
 ---
 
-## 📄 开源协议
+## 📄 License
 
 MIT License.
 
-**VanityH**：让手写 Render 函数不再是痛苦，而是一种享受。
+**VanityH**: Make writing render functions a pleasure, not a pain.
