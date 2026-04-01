@@ -94,6 +94,12 @@ const app = div.class("app").style("padding: 20px")(
 );
 ```
 
+#### 在 Playground 中尝试
+
+在浏览器中立即体验 VanityH：
+
+[![在 StackBlitz 中尝试](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-bujruupx)
+
 #### 传统写法 vs VanityH
 
 ```js

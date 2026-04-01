@@ -94,6 +94,12 @@ const app = div.class("app").style("padding: 20px")(
 );
 ```
 
+#### Try it in Playground
+
+Experience VanityH instantly in your browser:
+
+[![Try in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-bujruupx)
+
 #### Traditional vs VanityH Syntax
 
 ```js
