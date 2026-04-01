@@ -161,7 +161,7 @@ const element = v.div.class("test").id("app")("Content");
 
 ### 🤝 Contributing
 
-We welcome all forms of contributions! Please check the [Contributing Guide](./CONTRIBUTING.md) for details.
+We welcome all forms of contributions!
 
 #### Development Setup
 
