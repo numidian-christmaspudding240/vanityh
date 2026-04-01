@@ -1,31 +1,36 @@
-# VanityH
+<h1 align="center">
+  VanityH
+  <a href="https://www.npmjs.com/package/vanity-h"><img src="https://img.shields.io/npm/v/vanity-h.svg?style=flat" alt="npm version"></a>
+</h1>
 
 [简体中文](./README_zh.md)
 
-**An Ultra-Lightweight, Immutable Streaming Rendering Factory (Fluent Hyperscript Factory)**
+### 🚀 VanityH: Make Hyperscript Elegant
 
-VanityH is not just another complex UI framework. It is a minimal **DSL (Domain-Specific Language) builder**. Using Proxy and closure logic, it transforms tedious `h(tag, props, children)` calls into a highly rhythmic, fluent development experience similar to **SwiftUI** or **Flutter**.
+**Say goodbye to nesting hell, embrace fluent development experience**
 
----
-
-## ⚡️ Core Pain Points: What It Solves
-
-In non-JSX environments (such as vanilla JS/TS, scripting tools, low-code engines), developers commonly face these issues:
-
-1. **Nesting Hell (Object Nesting)**: Traditional `h` functions require heavy nesting of objects like `{ class: '...', id: '...' }`, creating excessive visual noise and difficult bracket alignment.
-2. **Prop Mutation**: When reusing a base element (e.g., `const btn = div.class('btn')`), subsequent modifications often accidentally pollute the original definition.
-3. **Cognitive Load**: Property definitions, event bindings, and child node nesting are interleaved, making it hard to visualize the DOM structure at a glance.
-4. **Environment Dependencies (Compilation)**: JSX requires complex Babel/SWC setup and cannot be used out of the box in lightweight scripts or native browser environments.
-
-**VanityH resolves these conflicts perfectly with “chainable configuration + terminator rendering” logic.**
+VanityH is not just another complex UI framework. It's a minimal **DSL (Domain-Specific Language) builder**. Using Proxy and closure logic, it transforms verbose `h(tag, props, children)` calls into a fluent, chainable syntax similar to **SwiftUI** or **Flutter**.
 
 ---
 
-## 🌟 Key Advantages: Why VanityH?
+### 🎯 Core Problems VanityH Solves
 
-### 1. Structural Elegance
+In non-JSX environments (vanilla JS/TS, scripting tools, low-code engines), developers face these challenges:
 
-VanityH cleanly separates “property configuration” from “node mounting” at the syntax level. Properties are expressed via chained `.prop()` calls, while child nodes are wrapped in `()`. This visual **bracket symmetry** creates a near-perfect mapping between code structure and the resulting HTML structure.
+- **Nesting Hell**: Traditional `h` functions require heavy object nesting, creating visual noise
+- **Prop Mutation**: Component reuse often accidentally pollutes original definitions
+- **Cognitive Load**: Properties, events, and child nodes are interleaved, making DOM structure hard to understand
+- **Environment Dependencies**: JSX requires compilation setup, not suitable for lightweight use in native browser environments
+
+**VanityH perfectly resolves these issues with "chainable configuration + terminator rendering" logic.**
+
+---
+
+### ✨ Why Choose VanityH?
+
+#### 🎨 Structural Elegance
+
+VanityH separates property configuration from node mounting syntax, creating perfect mapping between code structure and DOM structure.
 
 ```js
 html.lang("en")(
@@ -38,11 +43,9 @@ html.lang("en")(
 );
 ```
 
-### 2. Fully Immutable Architecture
+#### 🔒 Fully Immutable Architecture
 
-Built around the philosophy of **Copy-on-Write**. When you call a property method, VanityH never mutates the current object. Instead, it produces a brand-new “state snapshot” via closure.
-
-This guarantees **absolute safety** when destructuring and reusing components:
+Based on **Copy-on-Write** philosophy, each property call produces a brand-new state snapshot.
 
 ```js
 const baseBtn = button.class("btn");
@@ -51,67 +54,141 @@ const redBtn = baseBtn.style("color: red")("Red Button");
 const blueBtn = baseBtn.style("color: blue")("Blue Button"); // baseBtn remains pure
 ```
 
-### 3. Zero Magic, Full Transparency
+#### 🔍 Zero Magic Design
 
-We stand by the principle: _tools should not be smarter than developers_. VanityH does not auto-handle booleans or perform implicit conversions. It acts only as a **high-performance translator**: every chained key-value pair is passed exactly as-is to the underlying renderer.
+Tools should not be smarter than developers. VanityH doesn't auto-handle booleans, no implicit conversions, fully transparent.
 
-### 4. Ultra-Lightweight & Compatible
+#### 📦 Ultra-Lightweight & Compatible
 
-- **Size**: Core logic in ~10 lines of code, nearly negligible when minified.
-- **Compatibility**: Works with Vue, Preact, React (with custom h), Snabbdom, and any framework following the `h(tag, props, children)` convention.
-
----
-
-## 🛠 Technical Implementation
-
-Internally, VanityH uses JavaScript’s **Proxy** to intercept `get` operations, paired with **recursive closures** to manage state.
-
-- **Configuration Mode**: Accessing a property returns a new Proxy whose internal closure holds the accumulated `props` object.
-- **Execution Mode**: When the Proxy is invoked as a function, it acts as a “terminator”, passing the closure-held `props` and incoming `children` (automatically flattened with `flat(Infinity)`) to the rendering engine.
+- **Size**: Core logic ~10 lines of code, nearly negligible when minified
+- **Compatibility**: Supports Vue, Preact, React, Snabbdom, and any hyperscript-compatible renderer
 
 ---
 
-## 📦 Installation & Integration
+### 🚀 Quick Start
+
+#### Installation
 
 ```bash
 npm install vanity-h
 ```
 
-### Quick Start (Vue Example)
+#### Basic Usage (Vue 3)
 
 ```typescript
 import { h } from "vue";
 import createVanity from "vanity-h";
 
-// 1. Initialize (destructure tags you need)
-const { x, div, p, span } = createVanity(h);
+// Initialize and destructure needed tags
+const { x, div, button, span, h1 } = createVanity(h);
 
 // 2. Wrap custom components
 import MyComp from "./MyComp.vue";
 
-const UI = div.class("wrapper")(
+// Create UI
+const app = div.class("app").style("padding: 20px")(
+  h1("VanityH Demo"),
   x(MyComp).theme("dark").onClose(handleClose)(), // Use x wrapper
-  p.style("font-weight: bold")("VanityH is ready"),
+  button.onClick(() => alert("Hello!"))("Click Me"),
+  span.style("color: blue")("Experience elegant chaining"),
+);
+```
+
+#### Traditional vs VanityH Syntax
+
+```js
+// Traditional hyperscript
+h(
+  "div",
+  {
+    class: "card",
+    style: "padding: 20px",
+  },
+  [
+    h(
+      "button",
+      {
+        class: "btn-primary",
+        onClick: handleClick,
+      },
+      "Click me",
+    ),
+  ],
+);
+
+// VanityH syntax
+div.class("card").style("padding: 20px")(
+  button.class("btn-primary").onClick(handleClick)("Click me"),
 );
 ```
 
 ---
 
-## ⌨️ TypeScript Support
+### 🛠 Technical Implementation
 
-VanityH provides fully optimized TypeScript type inference.
+VanityH internally uses JavaScript's **Proxy** to intercept `get` operations, combined with **recursive closures** to manage state:
+
+- **Configuration Mode**: Accessing properties returns a new Proxy with internal closure holding accumulated `props` object
+- **Execution Mode**: When Proxy is called as function, it submits `props` and `children` to the renderer
+
+---
+
+### 🔧 TypeScript Support
+
+VanityH provides deeply optimized type inference:
 
 ```typescript
 import createVanity, { type VanityH } from "vanity-h";
+import { h, VNode } from "vue";
 
 // Strongly typed
 const v: VanityH<VNode> = createVanity(h);
+
+// Type checking
+const element = v.div.class("test").id("app")("Content");
 ```
 
 ---
 
-## 📄 License
+### 📊 Performance
 
-MIT License.
+- **Size**: ~600 bytes (gzipped)
+- **Zero Dependencies**: Pure JavaScript implementation
+- **High Performance**: Proxy interception overhead is negligible
+- **Memory Friendly**: Closure-based immutable design
+
+---
+
+### 🤝 Contributing
+
+We welcome all forms of contributions! Please check the [Contributing Guide](./CONTRIBUTING.md) for details.
+
+#### Development Setup
+
+```bash
+git clone https://github.com/VanityH/vanityh.git
+cd vanityh
+npm install
+npm run dev  # Start development server
+```
+
+---
+
+### 📄 License
+
+MIT License © 2024 VanityH Team
 
 **VanityH**: Make writing render functions a pleasure, not a pain.
+
+---
+
+### 🙏 Acknowledgments
+
+Thanks to these projects for inspiring VanityH:
+
+- [HTM](https://github.com/developit/htm) - JSX-like syntax in plain JavaScript
+- [DLight](https://dlight.dev) - DX-first UI rendering library
+- [Hyperscript](https://github.com/hyperhype/hyperscript) - Create HTML with JavaScript
+- [SwiftUI](https://developer.apple.com/xcode/swiftui/) - Declarative UI framework
+
+Special thanks to all developers contributing to the open source community!
