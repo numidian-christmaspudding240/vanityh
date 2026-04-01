@@ -176,7 +176,7 @@ npm run dev  # Start development server
 
 ### 📄 License
 
-MIT License © 2024 VanityH Team
+MIT License © 2026 VanityH Team
 
 **VanityH**: Make writing render functions a pleasure, not a pain.
 

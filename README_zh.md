@@ -176,7 +176,7 @@ npm run dev  # 启动开发服务器
 
 ### 📄 开源协议
 
-MIT License © 2024 VanityH Team
+MIT License © 2026 VanityH Team
 
 **VanityH**：让手写 Render 函数不再是痛苦，而是一种享受。
 
