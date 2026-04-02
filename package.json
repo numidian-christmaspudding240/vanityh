@@ -1,16 +1,16 @@
 {
   "name": "vanity-h",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "VanityH – Elegant Hyperscript DSL for Frontend Render Functions",
   "keywords": [
     "Hyperscript Tagged Markup",
+    "htm",
+    "html",
+    "hyperscript",
+    "jsx",
     "tagged template",
     "template literals",
-    "html",
-    "htm",
-    "jsx",
-    "virtual dom",
-    "hyperscript"
+    "virtual dom"
   ],
   "homepage": "https://github.com/VanityH/vanityh#readme",
   "bugs": {
