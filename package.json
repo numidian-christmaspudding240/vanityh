@@ -1,6 +1,6 @@
 {
   "name": "vanity-h",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "VanityH: Fluent, Immutable & Closure-based Hyperscript Factory.",
   "homepage": "https://github.com/VanityH/vanityh#readme",
   "bugs": {
