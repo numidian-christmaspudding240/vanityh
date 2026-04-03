@@ -60,7 +60,7 @@ Tools should not be smarter than developers. VanityH doesn't auto-handle boolean
 
 #### 📦 Ultra-Lightweight & Compatible
 
-- **Size**: Core logic ~10 lines of code, nearly negligible when minified
+- **Size**: Just 186 bytes, ultra-minimal implementation
 - **Compatibility**: Supports Vue, Preact, React, Snabbdom, and any hyperscript-compatible renderer
 
 ---
@@ -179,7 +179,7 @@ const element = v.div.class("test").id("app")("Content");
 
 ### 📊 Performance
 
-- **Size**: ~600 bytes (gzipped)
+- **Size**: 186 bytes (minified) / ~150 bytes (gzipped)
 - **Zero Dependencies**: Pure JavaScript implementation
 - **High Performance**: Proxy interception overhead is negligible
 - **Memory Friendly**: Closure-based immutable design
