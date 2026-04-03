@@ -1,6 +1,6 @@
 {
   "name": "vanity-h",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "VanityH – Elegant Hyperscript DSL for Frontend Render Functions",
   "keywords": [
     "Hyperscript Tagged Markup",
