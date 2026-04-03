@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       vanity-h:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: file:../
+        version: file:..
     devDependencies:
       typescript:
         specifier: ~6.0.2
@@ -334,8 +334,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  vanity-h@1.0.1:
-    resolution: {integrity: sha512-KsZwENlPjPrfwty1YrDKcKC8wtsCGESPkofM1+eXXxKZazDC97hJH+hm42tyhMV1vqcM/q88muXNRN86lw+ArQ==}
+  vanity-h@file:..:
+    resolution: {directory: .., type: directory}
 
   vite@8.0.3:
     resolution: {integrity: sha512-B9ifbFudT1TFhfltfaIPgjo9Z3mDynBTJSUYxTjOQruf/zHH+ezCQKcoqO+h7a9Pw9Nm/OtlXAiGT1axBgwqrQ==}
@@ -657,7 +657,7 @@ snapshots:
 
   typescript@6.0.2: {}
 
-  vanity-h@1.0.1: {}
+  vanity-h@file:..: {}
 
   vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1):
     dependencies:

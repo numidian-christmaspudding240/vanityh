@@ -1,5 +1,5 @@
 /**
- * VanityH: Fluent, Immutable & Closure-based Hyperscript Factory.
+ * VanityH – Elegant Hyperscript DSL for Frontend Render Functions
  */
 
 /** 链式构建器：支持属性累加与最终渲染调用 */
@@ -35,7 +35,7 @@ export default function createVanity<
   /** 递归 Proxy：利用闭包实现 Immutable 状态管理 */
   const createProxy = (tag: any, props: Record<string, any> = {}): ElementBuilder<VNode> => {
     /** 渲染执行函数：合并当前闭包 props 与子节点 */
-    const fn = (...children: any[]): VNode => h(tag, props, ...children.flat(Infinity));
+    const fn = (...children: any[]): VNode => h(tag, { ...props }, ...children.flat(Infinity));
 
     return new Proxy(fn as any, {
       // 写时拷贝：产生包含新属性的作用域分身
