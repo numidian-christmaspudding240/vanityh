@@ -69,8 +69,29 @@ Tools should not be smarter than developers. VanityH doesn't auto-handle boolean
 
 #### Installation
 
+**NPM:**
+
 ```bash
 npm install vanity-h
+```
+
+**CDN (No Build Step Required):**
+
+```html
+<script type="module">
+  // Using esm.sh (recommended) or unpkg
+  import { render, h } from "https://esm.sh/preact";
+  import createVanity from "https://esm.sh/vanity-h";
+  // Alternative: https://unpkg.com/vanity-h
+
+  const { div, span } = createVanity(h);
+
+  // Create UI with VanityH
+  const app = () => div.class("app")(span("Hello World"));
+
+  // Render to DOM
+  render(app(), document.getElementById("app"));
+</script>
 ```
 
 #### Basic Usage (Vue 3)
