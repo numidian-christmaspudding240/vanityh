@@ -1,10 +1,19 @@
 import { defineComponent, h, ref } from "vue";
-import createVanity from "vanity-h";
 import viteLogo from "../assets/vite.svg";
 import heroImg from "../assets/hero.png";
 import vueLogo from "../assets/vue.svg";
 
-const { img, header, section, div, p, code, ul, li, a, svg, use } = createVanity(h);
+import createVanity from "../../../src";
+
+const { x, img, header, section, div, p, code, ul, li, a, svg, use } = createVanity(h);
+
+const DemoFuncCom = x(({ text }: { text: string }) => div("DemoFuncCom text: ", text));
+
+const DemoSetupCom = x(
+  defineComponent((props) => () => div("DemoSetupCom text: ", props.text), {
+    props: { text: String },
+  }),
+);
 
 export default defineComponent(() => {
   const count = ref(0);
@@ -22,6 +31,11 @@ export default defineComponent(() => {
         ),
         p.class("counter").onClick(() => count.value++)(`Count is ${count.value}`),
       ),
+
+      div.class("ticks")(),
+
+      DemoFuncCom.text("PropValue")(),
+      DemoSetupCom.text("PropValue")(),
 
       div.class("ticks")(),
 

@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      vanity-h:
-        specifier: file:../
-        version: file:..
     devDependencies:
       typescript:
         specifier: ~6.0.2
@@ -334,9 +330,6 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  vanity-h@file:..:
-    resolution: {directory: .., type: directory}
-
   vite@8.0.3:
     resolution: {integrity: sha512-B9ifbFudT1TFhfltfaIPgjo9Z3mDynBTJSUYxTjOQruf/zHH+ezCQKcoqO+h7a9Pw9Nm/OtlXAiGT1axBgwqrQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -656,8 +649,6 @@ snapshots:
     optional: true
 
   typescript@6.0.2: {}
-
-  vanity-h@file:..: {}
 
   vite@8.0.3(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1):
     dependencies:
