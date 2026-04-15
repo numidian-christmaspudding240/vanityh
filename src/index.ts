@@ -37,7 +37,19 @@ export function createVanity<
     })
   }
 
+  Object.defineProperty(Object.prototype, '$', {
+    get() {
+      return createProxy(this.valueOf())
+    },
+  })
+
   return new Proxy({} as any, {
     get: (_, tag: string) => (tag === 'x' ? (c: any) => createProxy(c) : createProxy(tag)),
   }) as VanityH<VNode>
+}
+
+declare global {
+  interface Object {
+    $: ElementBuilder<any, VNode>
+  }
 }

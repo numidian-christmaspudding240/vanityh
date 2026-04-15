@@ -45,7 +45,9 @@ export function defineComponent<
   Props extends Record<string, any> = {},
   Emits extends Record<string, (...args: any[]) => any> = {},
 >(...args: any[]): VueComponentWithProps<Props & EmitsToProps<Emits>> {
-  return vanity.x<Props & EmitsToProps<Emits>>(vueDefineComponent(...(args as [any])))
+  const instance = vueDefineComponent(...(args as [any]))
+  instance.$ = vanity.x<Props & EmitsToProps<Emits>>(instance)
+  return instance
 }
 
 export function defineAsyncComponent<Props extends Record<string, any> = {}>(
