@@ -1,10 +1,12 @@
-import { defineConfig } from "vite-plus";
+import { defineConfig } from 'vite-plus'
 
 export default defineConfig({
   pack: {
-    platform: "browser",
+    entry: 'src/*.ts',
     dts: true,
     minify: true,
+    deps: { skipNodeModulesBundle: true },
+    platform: 'neutral',
     exports: true,
   },
   lint: {
@@ -13,5 +15,9 @@ export default defineConfig({
       typeCheck: true,
     },
   },
-  fmt: {},
-});
+  fmt: {
+    singleQuote: true,
+    semi: false,
+    sortImports: true,
+  },
+})

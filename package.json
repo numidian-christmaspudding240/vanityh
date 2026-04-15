@@ -1,6 +1,6 @@
 {
   "name": "vanity-h",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "VanityH – Elegant Hyperscript DSL for Frontend Render Functions",
   "keywords": [
     "Hyperscript Tagged Markup",
@@ -29,6 +29,9 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
+    "./preact": "./dist/preact.js",
+    "./react": "./dist/react.js",
+    "./vue": "./dist/vue.js",
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -39,15 +42,17 @@
     "dev": "vp pack --watch",
     "test": "vp test",
     "check": "vp check",
-    "prepublishOnly": "vp run build",
-    "publish": "pnpm dlx bumpp"
+    "prepublishOnly": "vp run build"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@typescript/native-preview": "7.0.0-dev.20260328.1",
-    "bumpp": "^11.0.1",
-    "typescript": "^6.0.2",
-    "vite-plus": "^0.1.14"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "preact": "catalog:",
+    "react": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vue": "catalog:"
   },
   "packageManager": "pnpm@10.33.0"
 }

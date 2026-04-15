@@ -33,14 +33,14 @@ In non-JSX environments (vanilla JS/TS, scripting tools, low-code engines), deve
 VanityH separates property configuration from node mounting syntax, creating perfect mapping between code structure and DOM structure.
 
 ```js
-html.lang("en")(
+html.lang('en')(
   head(
-    meta.charset("UTF-8")(),
-    link.rel("icon").type("image/svg+xml").href("/favicon.svg")(),
-    title("VanityH – Elegance Redefined"),
+    meta.charset('UTF-8')(),
+    link.rel('icon').type('image/svg+xml').href('/favicon.svg')(),
+    title('VanityH – Elegance Redefined'),
   ),
-  body(div.id("app")(), script.type("module").src("/src/main.ts")()),
-);
+  body(div.id('app')(), script.type('module').src('/src/main.ts')()),
+)
 ```
 
 #### 🔒 Fully Immutable Architecture
@@ -48,10 +48,10 @@ html.lang("en")(
 Based on **Copy-on-Write** philosophy, each property call produces a brand-new state snapshot.
 
 ```js
-const baseBtn = button.class("btn");
+const baseBtn = button.class('btn')
 
-const redBtn = baseBtn.style("color: red")("Red Button");
-const blueBtn = baseBtn.style("color: blue")("Blue Button"); // baseBtn remains pure
+const redBtn = baseBtn.style('color: red')('Red Button')
+const blueBtn = baseBtn.style('color: blue')('Blue Button') // baseBtn remains pure
 ```
 
 #### 🔍 Zero Magic Design
@@ -80,39 +80,39 @@ npm install vanity-h
 ```html
 <script type="module">
   // Using esm.sh (recommended) or unpkg
-  import { render, h } from "https://esm.sh/preact";
-  import createVanity from "https://esm.sh/vanity-h";
+  import { render, h } from 'https://esm.sh/preact'
+  import createVanity from 'https://esm.sh/vanity-h'
   // Alternative: https://unpkg.com/vanity-h
 
-  const { div, span } = createVanity(h);
+  const { div, span } = createVanity(h)
 
   // Create UI with VanityH
-  const app = () => div.class("app")(span("Hello World"));
+  const app = () => div.class('app')(span('Hello World'))
 
   // Render to DOM
-  render(app(), document.getElementById("app"));
+  render(app(), document.getElementById('app'))
 </script>
 ```
 
 #### Basic Usage (Vue 3)
 
 ```typescript
-import { h } from "vue";
-import createVanity from "vanity-h";
+import { h } from 'vue'
+import createVanity from 'vanity-h'
 
 // Initialize and destructure needed tags
-const { x, div, button, span, h1 } = createVanity(h);
+const { x, div, button, span, h1 } = createVanity(h)
 
 // 2. Wrap custom components
-import MyComp from "./MyComp.vue";
+import MyComp from './MyComp.vue'
 
 // Create UI
-const app = div.class("app").style("padding: 20px")(
-  h1("VanityH Demo"),
-  x(MyComp).theme("dark").onClose(handleClose)(), // Use x wrapper
-  button.onClick(() => alert("Hello!"))("Click Me"),
-  span.style("color: blue")("Experience elegant chaining"),
-);
+const app = div.class('app').style('padding: 20px')(
+  h1('VanityH Demo'),
+  x(MyComp).theme('dark').onClose(handleClose)(), // Use x wrapper
+  button.onClick(() => alert('Hello!'))('Click Me'),
+  span.style('color: blue')('Experience elegant chaining'),
+)
 ```
 
 #### Try it in Playground
@@ -126,27 +126,27 @@ Experience VanityH instantly in your browser:
 ```js
 // Traditional hyperscript
 h(
-  "div",
+  'div',
   {
-    class: "card",
-    style: "padding: 20px",
+    class: 'card',
+    style: 'padding: 20px',
   },
   [
     h(
-      "button",
+      'button',
       {
-        class: "btn-primary",
+        class: 'btn-primary',
         onClick: handleClick,
       },
-      "Click me",
+      'Click me',
     ),
   ],
-);
+)
 
 // VanityH syntax
-div.class("card").style("padding: 20px")(
-  button.class("btn-primary").onClick(handleClick)("Click me"),
-);
+div.class('card').style('padding: 20px')(
+  button.class('btn-primary').onClick(handleClick)('Click me'),
+)
 ```
 
 ---
@@ -165,14 +165,14 @@ VanityH internally uses JavaScript's **Proxy** to intercept `get` operations, co
 VanityH provides deeply optimized type inference:
 
 ```typescript
-import createVanity, { type VanityH } from "vanity-h";
-import { h, VNode } from "vue";
+import createVanity, { type VanityH } from 'vanity-h'
+import { h, VNode } from 'vue'
 
 // Strongly typed
-const v: VanityH<VNode> = createVanity(h);
+const v: VanityH<VNode> = createVanity(h)
 
 // Type checking
-const element = v.div.class("test").id("app")("Content");
+const element = v.div.class('test').id('app')('Content')
 ```
 
 ---
