@@ -21,13 +21,6 @@ const Demo = defineComponent(
   },
 )
 
-const DemoB = defineComponent(
-  (props: { text: string }) => {
-    return () => div('hi', props.text)
-  },
-  { props: ['text'] },
-)
-
 const App = defineComponent(() => {
   return () =>
     div(
@@ -36,7 +29,6 @@ const App = defineComponent(() => {
         .class({ style_class: true })
         .style({ color: 'red' })
         .onclick(() => {})(),
-      DemoB.$.text('www')(),
       Demo.$.name('tom')
         .age(20)
         .onSay(() => {})
