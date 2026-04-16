@@ -113,22 +113,28 @@ VanityH ships with first-class adapters for Vue, React, and Preact with full Typ
 
 ```typescript
 import vanity, { defineComponent } from 'vanity-h/vue'
+import { createApp, type EmitFn } from 'vue'
 
-const { div, span } = vanity
+const { div } = vanity
 
-// defineComponent wraps Vue's defineComponent and attaches $ for typed chaining
-const MyComp = defineComponent((props: { name: string; age: number }) => {
-  return () => div.class('demo')(span(props.name))
-})
+type MyEmits = { say: (word: string) => void }
 
-// Usage — both are equivalent, $ provides full type checking
-const app = defineComponent(() => {
+const MyComp = defineComponent(
+  (props: { name: string; age: number }, { emit }: { emit: EmitFn<MyEmits> }) => {
+    return () => div.class('demo')(props.name, props.age)
+  },
+  { props: ['name', 'age'], emits: ['say'] },
+)
+
+const App = defineComponent(() => {
   return () =>
     div(
-      MyComp.$.name('Tom').age(20)(), // ✅ typed
+      MyComp.$.name('Tom').age(20).onSay((word) => console.log(word))(), // ✅ typed
       MyComp.$.name(123)(), // ❌ type error: number not assignable to string
     )
 })
+
+createApp(App).mount('#app')
 ```
 
 #### React

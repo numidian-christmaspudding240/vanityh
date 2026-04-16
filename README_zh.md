@@ -113,22 +113,28 @@ VanityH 为 Vue、React 和 Preact 提供一流的适配层，支持完整的 Ty
 
 ```typescript
 import vanity, { defineComponent } from 'vanity-h/vue'
+import { createApp, type EmitFn } from 'vue'
 
-const { div, span } = vanity
+const { div } = vanity
 
-// defineComponent 包装 Vue 的 defineComponent，并附加 $ 属性用于类型化链式调用
-const MyComp = defineComponent((props: { name: string; age: number }) => {
-  return () => div.class('demo')(span(props.name))
-})
+type MyEmits = { say: (word: string) => void }
 
-// 两种写法等价，$ 提供完整类型检查
-const app = defineComponent(() => {
+const MyComp = defineComponent(
+  (props: { name: string; age: number }, { emit }: { emit: EmitFn<MyEmits> }) => {
+    return () => div.class('demo')(props.name, props.age)
+  },
+  { props: ['name', 'age'], emits: ['say'] },
+)
+
+const App = defineComponent(() => {
   return () =>
     div(
-      MyComp.$.name('Tom').age(20)(), // ✅ 类型正确
+      MyComp.$.name('Tom').age(20).onSay((word) => console.log(word))(), // ✅ 类型正确
       MyComp.$.name(123)(), // ❌ 类型错误：number 不能赋值给 string
     )
 })
+
+createApp(App).mount('#app')
 ```
 
 #### React
