@@ -1,7 +1,6 @@
 import {
   h,
   defineComponent as vueDefineComponent,
-  defineAsyncComponent as vueDefineAsyncComponent,
 } from 'vue'
 import type {
   VNode,
@@ -77,8 +76,5 @@ export function defineComponent<
   return instance as any
 }
 
-export function defineAsyncComponent<Props extends Record<string, any> = {}>(
-  ...args: Parameters<typeof vueDefineAsyncComponent>
-): VueComponentWithProps<Props> {
-  return vanity.x<Props>(vueDefineAsyncComponent(...args))
-}
+
+
