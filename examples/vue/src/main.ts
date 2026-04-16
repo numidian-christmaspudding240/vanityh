@@ -13,13 +13,20 @@ const Demo = defineComponent(
     console.log(props)
     emit('run')
     emit('say', 'hi')
-    return () => div.class('demo-class')('hello world')
+    return () => div.class('demo-class')('hello world', props.name, props.age)
+  },
+  {
+    props: ['name', 'age'],
+    emits: ['run', 'say'],
   },
 )
 
-const DemoB = defineComponent((props: { text: string }) => {
-  return () => div('hi', props.text)
-})
+const DemoB = defineComponent(
+  (props: { text: string }) => {
+    return () => div('hi', props.text)
+  },
+  { props: ['text'] },
+)
 
 const App = defineComponent(() => {
   return () =>
@@ -38,4 +45,4 @@ const App = defineComponent(() => {
     )
 })
 
-createApp(App.$()).mount('#app')
+createApp(App).mount('#app')

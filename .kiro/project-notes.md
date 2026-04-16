@@ -25,14 +25,16 @@ div.class('card')(button.onClick(fn)('Click'))
 
 ```js
 x(Demo).name('Tom').age(20)()
-Demo.$.name('Tom').age(20)()  // 等价
+Demo.$.name('Tom').age(20)() // 等价
 ```
 
 ### 运行时实现
 
 ```typescript
 Object.defineProperty(Object.prototype, '$', {
-  get() { return createProxy(this.valueOf()) }
+  get() {
+    return createProxy(this.valueOf())
+  },
 })
 ```
 
@@ -42,7 +44,9 @@ Object.defineProperty(Object.prototype, '$', {
 
 ```typescript
 declare global {
-  interface Object { $: any }
+  interface Object {
+    $: any
+  }
 }
 ```
 
@@ -82,16 +86,17 @@ Vue 内置组件（`Transition` 等）走全局 `any`，可自由调用。
 
 ## 类型系统关键决策
 
-| 场景 | 方案 | 原因 |
-|------|------|------|
-| 全局 `Object.$` | `any` | 接口属性无法访问 `this` 的具体类型，这是 TypeScript 的根本限制 |
-| Preact/React 组件 `$` | `defineComponent` 包装 | 通过函数泛型推断 Props |
-| Vue 组件 `$` | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露 |
-| Vue 内置组件 `$` | 全局 `any` | 模块增强中无法使用 `this` 多态 |
+| 场景                  | 方案                                  | 原因                                                           |
+| --------------------- | ------------------------------------- | -------------------------------------------------------------- |
+| 全局 `Object.$`       | `any`                                 | 接口属性无法访问 `this` 的具体类型，这是 TypeScript 的根本限制 |
+| Preact/React 组件 `$` | `defineComponent` 包装                | 通过函数泛型推断 Props                                         |
+| Vue 组件 `$`          | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露                                 |
+| Vue 内置组件 `$`      | 全局 `any`                            | 模块增强中无法使用 `this` 多态                                 |
 
 ## 懒加载组件
 
 **Vue** — `defineAsyncComponent` 不需要包装，直接使用原生 API：
+
 - 异步组件 Props 类型无法从 loader 函数自动提取
 - 懒加载场景不需要链式配置 props
 - 需要传 props 时用 `$` 或 `x()`（走 `any`）

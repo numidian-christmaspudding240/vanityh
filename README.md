@@ -79,74 +79,104 @@ npm install vanity-h
 
 ```html
 <script type="module">
-  // Using esm.sh (recommended) or unpkg
   import { render, h } from 'https://esm.sh/preact'
   import createVanity from 'https://esm.sh/vanity-h'
-  // Alternative: https://unpkg.com/vanity-h
 
   const { div, span } = createVanity(h)
 
-  // Create UI with VanityH
   const app = () => div.class('app')(span('Hello World'))
-
-  // Render to DOM
   render(app(), document.getElementById('app'))
 </script>
 ```
-
-#### Basic Usage (Vue 3)
-
-```typescript
-import { h } from 'vue'
-import createVanity from 'vanity-h'
-
-// Initialize and destructure needed tags
-const { x, div, button, span, h1 } = createVanity(h)
-
-// 2. Wrap custom components
-import MyComp from './MyComp.vue'
-
-// Create UI
-const app = div.class('app').style('padding: 20px')(
-  h1('VanityH Demo'),
-  x(MyComp).theme('dark').onClose(handleClose)(), // Use x wrapper
-  button.onClick(() => alert('Hello!'))('Click Me'),
-  span.style('color: blue')('Experience elegant chaining'),
-)
-```
-
-#### Try it in Playground
-
-Experience VanityH instantly in your browser:
-
-[![Try in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-bujruupx)
 
 #### Traditional vs VanityH Syntax
 
 ```js
 // Traditional hyperscript
-h(
-  'div',
-  {
-    class: 'card',
-    style: 'padding: 20px',
-  },
-  [
-    h(
-      'button',
-      {
-        class: 'btn-primary',
-        onClick: handleClick,
-      },
-      'Click me',
-    ),
-  ],
-)
+h('div', { class: 'card', style: 'padding: 20px' }, [
+  h('button', { class: 'btn-primary', onClick: handleClick }, 'Click me'),
+])
 
 // VanityH syntax
 div.class('card').style('padding: 20px')(
   button.class('btn-primary').onClick(handleClick)('Click me'),
 )
+```
+
+---
+
+### 🔧 Framework Adapters
+
+VanityH ships with first-class adapters for Vue, React, and Preact with full TypeScript support.
+
+#### Vue 3
+
+```typescript
+import vanity, { defineComponent } from 'vanity-h/vue'
+
+const { div, span } = vanity
+
+// defineComponent wraps Vue's defineComponent and attaches $ for typed chaining
+const MyComp = defineComponent((props: { name: string; age: number }) => {
+  return () => div.class('demo')(span(props.name))
+})
+
+// Usage — both are equivalent, $ provides full type checking
+const app = defineComponent(() => {
+  return () =>
+    div(
+      MyComp.$.name('Tom').age(20)(), // ✅ typed
+      MyComp.$.name(123)(), // ❌ type error: number not assignable to string
+    )
+})
+```
+
+#### React
+
+```typescript
+import vanity, { defineComponent } from 'vanity-h/react'
+
+const { div } = vanity
+
+const MyComp = defineComponent(({ name, age }: { name: string; age: number }) => {
+  return div(name, age)
+})
+
+// $ provides typed prop chaining
+MyComp.$.name('Tom').age(20)() // ✅
+```
+
+#### Preact
+
+```typescript
+import vanity, { defineComponent } from 'vanity-h/preact'
+
+const { div } = vanity
+
+const MyComp = defineComponent(({ name }: { name: string }) => {
+  return div(name)
+})
+
+MyComp.$.name('Tom')() // ✅
+```
+
+---
+
+### ✨ The `$` Property
+
+The `$` property is a shorthand equivalent to `x()` — it wraps any component for typed prop chaining:
+
+```typescript
+// These are equivalent
+x(MyComp).name('Tom').age(20)()
+MyComp.$.name('Tom').age(20)()
+```
+
+When using framework adapters with `defineComponent`, `$` carries full prop type inference. On components not wrapped with `defineComponent` (e.g. Vue built-ins like `Transition`), `$` is untyped but still callable:
+
+```typescript
+import { Transition } from 'vue'
+Transition.$.name('fade')() // works, untyped
 ```
 
 ---
@@ -162,18 +192,16 @@ VanityH internally uses JavaScript's **Proxy** to intercept `get` operations, co
 
 ### 🔧 TypeScript Support
 
-VanityH provides deeply optimized type inference:
-
 ```typescript
 import createVanity, { type VanityH } from 'vanity-h'
-import { h, VNode } from 'vue'
+import { h, type VNode } from 'vue'
 
-// Strongly typed
 const v: VanityH<VNode> = createVanity(h)
 
-// Type checking
 const element = v.div.class('test').id('app')('Content')
 ```
+
+Framework adapters provide deeper type inference — see [Framework Adapters](#-framework-adapters) above.
 
 ---
 
@@ -188,15 +216,15 @@ const element = v.div.class('test').id('app')('Content')
 
 ### 🤝 Contributing
 
-We welcome all forms of contributions!
-
 #### Development Setup
 
 ```bash
 git clone https://github.com/VanityH/vanityh.git
 cd vanityh
-npm install
-npm run dev  # Start development server
+vp install       # install dependencies
+vp check         # type check + lint
+vp test          # run tests
+vp pack          # build library
 ```
 
 ---
@@ -211,11 +239,7 @@ MIT License © 2026 VanityH Team
 
 ### 🙏 Acknowledgments
 
-Thanks to these projects for inspiring VanityH:
-
 - [HTM](https://github.com/developit/htm) - JSX-like syntax in plain JavaScript
 - [DLight](https://github.com/dlight-js/dlight) - DX-first UI rendering library
 - [Hyperscript](https://github.com/hyperhype/hyperscript) - Create HTML with JavaScript
 - [SwiftUI](https://developer.apple.com/swiftui) - Declarative UI framework
-
-Special thanks to all developers contributing to the open source community!

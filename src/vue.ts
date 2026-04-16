@@ -68,7 +68,5 @@ export function defineComponent<
     slots?: S
   },
 ): WithDollar<DefineSetupFnComponent<Props, E, S>> {
-  const instance = vueDefineComponent(setup as any, options as any)
-  instance.$ = vanity.x(instance)
-  return instance as any
+  return vueDefineComponent(setup as any, options as any) as any
 }
