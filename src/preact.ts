@@ -27,3 +27,9 @@ export type PreactVanityH = VanityH<JSX.Element, ComponentChild, JSX.IntrinsicEl
 
 const vanity = createVanity(h) as unknown as PreactVanityH
 export default vanity
+
+export function defineComponent<T extends (props: any) => JSX.Element>(
+  component: T,
+): T & { $: PreactElementBuilder<ExtractComponentProps<T>> } {
+  return component as any
+}

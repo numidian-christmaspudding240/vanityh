@@ -8,12 +8,6 @@ export type ElementBuilder<Props, VNode, Child = UniversalChild> = ((
   [K in keyof Props]-?: (value: Props[K]) => ElementBuilder<Props, VNode, Child>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export interface Callable extends Function {
-  (...args: any[]): any
-  [key: string]: any
-}
-
 export type VanityH<
   VNode,
   Child = UniversalChild,
