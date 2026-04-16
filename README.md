@@ -129,7 +129,9 @@ const MyComp = defineComponent(
 const App = defineComponent(() => {
   return () =>
     div(
-      MyComp.$.name('Tom').age(20).onSay((word) => console.log(word))(), // ✅ typed
+      MyComp.$.name('Tom')
+        .age(20)
+        .onSay((word) => console.log(word))(), // ✅ typed
       MyComp.$.name(123)(), // ❌ type error: number not assignable to string
     )
 })

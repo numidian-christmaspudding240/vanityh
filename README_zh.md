@@ -129,7 +129,9 @@ const MyComp = defineComponent(
 const App = defineComponent(() => {
   return () =>
     div(
-      MyComp.$.name('Tom').age(20).onSay((word) => console.log(word))(), // ✅ 类型正确
+      MyComp.$.name('Tom')
+        .age(20)
+        .onSay((word) => console.log(word))(), // ✅ 类型正确
       MyComp.$.name(123)(), // ❌ 类型错误：number 不能赋值给 string
     )
 })

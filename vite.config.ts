@@ -18,6 +18,6 @@ export default defineConfig({
   fmt: {
     singleQuote: true,
     semi: false,
-    sortImports: true,
+    sortImports: {},
   },
 })
