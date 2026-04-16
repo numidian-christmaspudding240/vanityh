@@ -24,87 +24,98 @@ div.class('card')(button.onClick(fn)('Click'))
 最近引入的 `$` 属性，允许任意对象/组件直接链式调用，等价于 `x()` 包装：
 
 ```js
-// 等价写法
 x(Demo).name('Tom').age(20)()
-Demo.$.name('Tom').age(20)()
+Demo.$.name('Tom').age(20)()  // 等价
 ```
 
-### 实现方式
-
-运行时通过 `Object.defineProperty(Object.prototype, '$', { get() { return createProxy(this.valueOf()) } })` 实现。
-
-类型系统中：
+### 运行时实现
 
 ```typescript
-// index.ts - 全局默认声明，不做类型检查
+Object.defineProperty(Object.prototype, '$', {
+  get() { return createProxy(this.valueOf()) }
+})
+```
+
+### 类型系统
+
+全局默认声明为 `any`，不做类型检查，框架层覆盖提供精确类型：
+
+```typescript
 declare global {
-  interface Object {
-    $: any
-  }
+  interface Object { $: any }
 }
 ```
 
-### 各框架的类型支持
+### 各框架类型支持
 
-**Preact / React**：通过 `defineComponent` 包装函数附加精确类型：
+**Preact / React** — `defineComponent` 包装，通过函数泛型推断 Props：
 
 ```typescript
-// preact.ts / react.ts
 export function defineComponent<T extends (props: any) => JSX.Element>(
   component: T,
 ): T & { $: PreactElementBuilder<ExtractComponentProps<T>> }
-```
 
-用法：
-
-```typescript
+// 用法
 const Demo = defineComponent(({ name, age }: PropsType) => { ... })
-Demo.$.name('Tom').age(20)() // ✅ 有精确类型检查
+Demo.$.name('Tom').age(20)() // ✅ 精确类型检查
 ```
 
-**Vue**：通过镜像 Vue 原生 `defineComponent` 的 setup 重载，利用 `ExtractVueProps` 提取 Props：
+**Vue** — 镜像 Vue 原生 `defineComponent` 的 setup 重载，通过 `abstract new` 模式提取 `$props`：
 
 ```typescript
-// vue.ts
 export type ExtractVueProps<T> = T extends abstract new (...args: any[]) => { $props: infer P }
-  ? P
-  : {}
+  ? P : {}
 
 export function defineComponent<Props, E, EE, S>(
   setup: (props: Props, ctx: SetupContext<E, S>) => RenderFunction,
   options?: ...
 ): DefineSetupFnComponent<Props, E, S> & {
-  $: VueComponentWithProps<ExtractVueProps<...> & Record<string, any>>
+  $: VueComponentWithProps<ExtractVueProps<...>>
 }
-```
 
-用法：
-
-```typescript
+// 用法
 const Demo = defineComponent((props: { name: string; age: number }) => { ... })
-Demo.$.name('tom').age(20)() // ✅ 有精确类型检查
+Demo.$.name('tom').age(20)() // ✅ 精确类型检查
 ```
 
 Vue 内置组件（`Transition` 等）走全局 `any`，可自由调用。
 
 ## 类型系统关键决策
 
-| 场景                  | 方案                                  | 原因                                          |
-| --------------------- | ------------------------------------- | --------------------------------------------- |
-| 全局 `Object.$`       | `any`                                 | TypeScript 接口属性无法访问 `this` 的具体类型 |
-| Preact/React 组件 `$` | `defineComponent` 包装                | 通过函数泛型推断 Props                        |
-| Vue 组件 `$`          | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露                |
-| Vue 内置组件 `$`      | 全局 `any`                            | 无法在模块增强中使用 `this` 多态              |
+| 场景 | 方案 | 原因 |
+|------|------|------|
+| 全局 `Object.$` | `any` | 接口属性无法访问 `this` 的具体类型，这是 TypeScript 的根本限制 |
+| Preact/React 组件 `$` | `defineComponent` 包装 | 通过函数泛型推断 Props |
+| Vue 组件 `$` | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露 |
+| Vue 内置组件 `$` | 全局 `any` | 模块增强中无法使用 `this` 多态 |
+
+## 懒加载组件
+
+**Vue** — `defineAsyncComponent` 不需要包装，直接使用原生 API：
+- 异步组件 Props 类型无法从 loader 函数自动提取
+- 懒加载场景不需要链式配置 props
+- 需要传 props 时用 `$` 或 `x()`（走 `any`）
+
+```typescript
+import { defineAsyncComponent } from 'vue'
+const AsyncComp = defineAsyncComponent(() => import('./Heavy.vue'))
+AsyncComp.$.someProp('value')() // 走 any，可用
+```
+
+**Preact/React** — `lazy` 返回特殊类型，不符合 `defineComponent` 的约束（`T extends (props: any) => JSX.Element`），天然排除误用。
 
 ## 已知限制
 
-- 不使用 `defineComponent` 包装的 Preact/React 组件，`$` 无类型检查（走 `any`）
-- Vue 的 options API 写法（`props: ['name', 'age']`）类型提取不如 setup 函数写法精确
-- Vue 内置组件的 `$` 无精确类型
+- 未用 `defineComponent` 包装的 Preact/React 组件，`$` 无类型检查
+- Vue 推荐统一用 setup 函数写法，options API 写法（`props: ['name']`）类型提取不精确
+- Vue 内置组件 `$` 无精确类型
+- Vue `defineComponent` 只支持 setup 函数重载，不支持纯 options 对象写法
 
 ## 工具链
 
-- 构建：`vp pack`
-- 类型检查 + lint：`vp check`
-- 格式化：`vp fmt`
-- 测试：`vp test`
+```bash
+vp pack        # 构建
+vp check       # 类型检查 + lint + 格式检查
+vp fmt         # 格式化
+vp test        # 测试
+```
