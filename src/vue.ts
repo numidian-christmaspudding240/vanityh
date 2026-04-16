@@ -1,7 +1,4 @@
-import {
-  h,
-  defineComponent as vueDefineComponent,
-} from 'vue'
+import { h, defineComponent as vueDefineComponent } from 'vue'
 import type {
   VNode,
   Ref,
@@ -75,6 +72,3 @@ export function defineComponent<
   instance.$ = vanity.x(instance)
   return instance as any
 }
-
-
-

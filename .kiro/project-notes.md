@@ -38,7 +38,9 @@ Demo.$.name('Tom').age(20)()
 ```typescript
 // index.ts - 全局默认声明，不做类型检查
 declare global {
-  interface Object { $: any }
+  interface Object {
+    $: any
+  }
 }
 ```
 
@@ -54,6 +56,7 @@ export function defineComponent<T extends (props: any) => JSX.Element>(
 ```
 
 用法：
+
 ```typescript
 const Demo = defineComponent(({ name, age }: PropsType) => { ... })
 Demo.$.name('Tom').age(20)() // ✅ 有精确类型检查
@@ -76,6 +79,7 @@ export function defineComponent<Props, E, EE, S>(
 ```
 
 用法：
+
 ```typescript
 const Demo = defineComponent((props: { name: string; age: number }) => { ... })
 Demo.$.name('tom').age(20)() // ✅ 有精确类型检查
@@ -85,12 +89,12 @@ Vue 内置组件（`Transition` 等）走全局 `any`，可自由调用。
 
 ## 类型系统关键决策
 
-| 场景 | 方案 | 原因 |
-|------|------|------|
-| 全局 `Object.$` | `any` | TypeScript 接口属性无法访问 `this` 的具体类型 |
-| Preact/React 组件 `$` | `defineComponent` 包装 | 通过函数泛型推断 Props |
-| Vue 组件 `$` | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露 |
-| Vue 内置组件 `$` | 全局 `any` | 无法在模块增强中使用 `this` 多态 |
+| 场景                  | 方案                                  | 原因                                          |
+| --------------------- | ------------------------------------- | --------------------------------------------- |
+| 全局 `Object.$`       | `any`                                 | TypeScript 接口属性无法访问 `this` 的具体类型 |
+| Preact/React 组件 `$` | `defineComponent` 包装                | 通过函数泛型推断 Props                        |
+| Vue 组件 `$`          | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露                |
+| Vue 内置组件 `$`      | 全局 `any`                            | 无法在模块增强中使用 `this` 多态              |
 
 ## 已知限制
 
