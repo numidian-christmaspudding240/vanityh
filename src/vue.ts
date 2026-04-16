@@ -3,7 +3,19 @@ import {
   defineComponent as vueDefineComponent,
   defineAsyncComponent as vueDefineAsyncComponent,
 } from 'vue'
-import type { VNode, Ref, ClassValue, StyleValue } from 'vue'
+import type {
+  VNode,
+  Ref,
+  ClassValue,
+  StyleValue,
+  EmitsOptions,
+  SlotsType,
+  SetupContext,
+  RenderFunction,
+  ComponentOptions,
+  ComponentObjectPropsOptions,
+  DefineSetupFnComponent,
+} from 'vue'
 
 import { createVanity, type VanityH, type ElementBuilder } from './index.ts'
 
@@ -38,16 +50,31 @@ export type VueVanityH = VanityH<
   VueElements
 >
 
+export type ExtractVueProps<T> = T extends abstract new (...args: any[]) => { $props: infer P }
+  ? P
+  : {}
+
 export const vanity = createVanity(h) as unknown as VueVanityH
 export default vanity
 
+type WithDollar<R> = R & { $: VueComponentWithProps<ExtractVueProps<R> & Record<string, any>> }
+
 export function defineComponent<
-  Props extends Record<string, any> = {},
-  Emits extends Record<string, (...args: any[]) => any> = {},
->(...args: any[]): VueComponentWithProps<Props & EmitsToProps<Emits>> {
-  const instance = vueDefineComponent(...(args as [any]))
-  instance.$ = vanity.x<Props & EmitsToProps<Emits>>(instance)
-  return instance
+  Props extends Record<string, any>,
+  E extends EmitsOptions = {},
+  EE extends string = string,
+  S extends SlotsType = {},
+>(
+  setup: (props: Props, ctx: SetupContext<E, S>) => RenderFunction | Promise<RenderFunction>,
+  options?: Pick<ComponentOptions, 'name' | 'inheritAttrs'> & {
+    props?: (keyof Props)[] | ComponentObjectPropsOptions<Props>
+    emits?: E | EE[]
+    slots?: S
+  },
+): WithDollar<DefineSetupFnComponent<Props, E, S>> {
+  const instance = vueDefineComponent(setup as any, options as any)
+  instance.$ = vanity.x(instance)
+  return instance as any
 }
 
 export function defineAsyncComponent<Props extends Record<string, any> = {}>(

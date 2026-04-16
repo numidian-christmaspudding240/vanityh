@@ -1,36 +1,25 @@
-import vanity from 'vanity-h/vue'
-import { createApp, defineComponent, type EmitFn, Transition } from 'vue'
+import vanity, { defineComponent } from 'vanity-h/vue'
+import { createApp, type EmitFn, Transition } from 'vue'
 
 const { div, img } = vanity
-
-type DemoPropsType = {
-  name: string
-  age: number
-}
 
 type DemoEmitsType = {
   run: () => void
   say: (word: string) => void
 }
 
-const Demo = defineComponent<DemoPropsType, DemoEmitsType>(
-  (props: DemoPropsType, { emit }: { emit: EmitFn<DemoEmitsType> }) => {
+const Demo = defineComponent(
+  (props: { name: string; age: number }, { emit }: { emit: EmitFn<DemoEmitsType> }) => {
     console.log(props)
     emit('run')
     emit('say', 'hi')
     return () => div.class('demo-class')('hello world')
   },
-  {
-    props: ['name', 'age'],
-    emits: ['say'],
-  },
 )
 
-const DemoB = defineComponent((props) => {
+const DemoB = defineComponent((props: { text: string }) => {
   return () => div('hi', props.text)
 })
-
-console.log('demo', Demo)
 
 const App = defineComponent(() => {
   return () =>
