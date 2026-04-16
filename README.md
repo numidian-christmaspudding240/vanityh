@@ -172,6 +172,8 @@ x(MyComp).name('Tom').age(20)()
 MyComp.$.name('Tom').age(20)()
 ```
 
+`$` is implemented as a global `Object.prototype` getter at runtime. Framework adapters' `defineComponent` is **purely a type-level wrapper** — it returns the component as-is with no runtime overhead. The global getter handles everything at runtime.
+
 When using framework adapters with `defineComponent`, `$` carries full prop type inference. On components not wrapped with `defineComponent` (e.g. Vue built-ins like `Transition`), `$` is untyped but still callable:
 
 ```typescript

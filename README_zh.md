@@ -172,6 +172,8 @@ x(MyComp).name('Tom').age(20)()
 MyComp.$.name('Tom').age(20)()
 ```
 
+`$` 在运行时通过全局 `Object.prototype` getter 实现。框架适配层的 `defineComponent` 是**纯类型层面的包装**，运行时原样返回组件，不添加任何额外逻辑，`$` 完全由全局 getter 处理。
+
 通过框架适配层的 `defineComponent` 包装后，`$` 具有完整的 Props 类型推断。对于未经 `defineComponent` 包装的组件（如 Vue 内置的 `Transition`），`$` 无类型检查但仍可调用：
 
 ```typescript
