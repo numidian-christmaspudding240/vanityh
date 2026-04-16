@@ -56,12 +56,6 @@ export function createVanity<
 
 declare global {
   interface Object {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    $: unknown
-  }
-
-  interface Function {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    $: unknown
+    $: any
   }
 }
