@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import vanity from 'vanity-h/react'
+import vanity, { defineComponent } from 'vanity-h/react'
 
 const { x, div, main, img } = vanity
 
@@ -10,11 +10,15 @@ function Demo({ name, age }: PropsType) {
   return div('demo2', name, age, img.src('src-url')())
 }
 
+const Demo2 = defineComponent(({ name, age }: PropsType) => {
+  return div('demo2', name, age, img.src('src-url')())
+})
+
 function App() {
   return div.className('div-class')(
     main(
       x(Demo).name('Tom').age(20)(),
-      Demo.$.name('Tom').age(20)(),
+      Demo2.$.name('Tom').age(20)(),
       div.style({ color: 'red' })(),
     ),
   )

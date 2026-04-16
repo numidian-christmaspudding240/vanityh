@@ -23,3 +23,9 @@ export type ReactVanityH = VanityH<JSX.Element, ReactNode, JSX.IntrinsicElements
 
 const vanity = createVanity(createElement) as unknown as ReactVanityH
 export default vanity
+
+export function defineComponent<T extends (props: any) => JSX.Element>(
+  component: T,
+): T & { $: ReactElementBuilder<ExtractComponentProps<T>> } {
+  return component as any
+}
