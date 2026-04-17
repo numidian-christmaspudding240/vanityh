@@ -21,6 +21,16 @@ const Demo = defineComponent(
   },
 )
 
+const Demo2 = defineComponent(
+  (props: { name: string }) => {
+    return () => div(props.name)
+  },
+  {
+    props: ['name'],
+    emits: { say: (word: string) => !!word, run: () => true },
+  },
+)
+
 const App = defineComponent(() => {
   return () =>
     div(
@@ -32,6 +42,9 @@ const App = defineComponent(() => {
       Demo.$.name('tom')
         .age(20)
         .onSay(() => {})
+        .onRun(() => {})(),
+      Demo2.$.name('tom')
+        .onSay((word) => console.log(word))
         .onRun(() => {})(),
       img.class(['image-class']).style('height:100%').src('source-url').alt('123')(),
     )

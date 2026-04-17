@@ -37,7 +37,7 @@ export type VueComponentWithProps<Props = {}> = ElementBuilder<
 >
 
 export type EmitsToProps<T extends Record<string, (...args: any[]) => any>> = {
-  [K in keyof T as `on${Capitalize<string & K>}`]: T[K]
+  [K in keyof T as `on${Capitalize<string & K>}`]: (...args: Parameters<T[K]>) => any
 }
 
 export type VueVanityH = VanityH<
@@ -53,7 +53,13 @@ export type ExtractVueProps<T> = T extends abstract new (...args: any[]) => { $p
 export const vanity = createVanity(h) as unknown as VueVanityH
 export default vanity
 
-type WithDollar<R> = R & { $: VueComponentWithProps<ExtractVueProps<R>> }
+type WithDollar<R, E extends EmitsOptions> = R & {
+  $: VueComponentWithProps<
+    E extends Record<string, (...args: any[]) => any>
+      ? Omit<ExtractVueProps<R>, `on${string}`> & EmitsToProps<E>
+      : ExtractVueProps<R>
+  >
+}
 
 export function defineComponent<
   Props extends Record<string, any>,
@@ -67,6 +73,6 @@ export function defineComponent<
     emits?: E | EE[]
     slots?: S
   },
-): WithDollar<DefineSetupFnComponent<Props, E, S>> {
+): WithDollar<DefineSetupFnComponent<Props, E, S>, E> {
   return vueDefineComponent(setup as any, options as any) as any
 }
