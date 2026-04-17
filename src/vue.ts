@@ -30,7 +30,7 @@ type VueElements = {
   [K in keyof HtmlTags]: Omit<HtmlTags[K], 'style'> & VueBaseProps
 }
 
-export type VueComponentWithProps<Props extends Record<string, any> = {}> = ElementBuilder<
+export type VueComponentWithProps<Props = {}> = ElementBuilder<
   Props & VueBaseProps,
   VNode,
   string | number | boolean | VNode | null | undefined
@@ -53,7 +53,7 @@ export type ExtractVueProps<T> = T extends abstract new (...args: any[]) => { $p
 export const vanity = createVanity(h) as unknown as VueVanityH
 export default vanity
 
-type WithDollar<R> = R & { $: VueComponentWithProps<ExtractVueProps<R> & Record<string, any>> }
+type WithDollar<R> = R & { $: VueComponentWithProps<ExtractVueProps<R>> }
 
 export function defineComponent<
   Props extends Record<string, any>,
