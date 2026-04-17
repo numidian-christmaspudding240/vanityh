@@ -113,31 +113,45 @@ VanityH ships with first-class adapters for Vue, React, and Preact with full Typ
 
 ```typescript
 import vanity, { defineComponent } from 'vanity-h/vue'
-import { createApp, type EmitFn } from 'vue'
+import { createApp } from 'vue'
 
 const { div } = vanity
 
-type MyEmits = { say: (word: string) => void }
-
+// Option A: array emits — event handlers are typed but parameters are `any`
 const MyComp = defineComponent(
-  (props: { name: string; age: number }, { emit }: { emit: EmitFn<MyEmits> }) => {
+  (props: { name: string; age: number }) => {
     return () => div.class('demo')(props.name, props.age)
   },
   { props: ['name', 'age'], emits: ['say'] },
 )
 
-const App = defineComponent(() => {
-  return () =>
-    div(
-      MyComp.$.name('Tom')
-        .age(20)
-        .onSay((word) => console.log(word))(), // ✅ typed
-      MyComp.$.name(123)(), // ❌ type error: number not assignable to string
-    )
-})
+MyComp.$.name('Tom')
+  .age(20)
+  .onSay(() => {})() // ✅ onSay exists and is checked
 
-createApp(App).mount('#app')
+// Option B: object emits — full parameter type inference
+const MyComp2 = defineComponent(
+  (props: { name: string }) => {
+    return () => div(props.name)
+  },
+  {
+    props: ['name'],
+    emits: { say: (word: string) => !!word },
+  },
+)
+
+MyComp2.$.name('Tom').onSay((word) => console.log(word))() // ✅ word: string
+MyComp2.$.name(123)() // ❌ type error
+
+createApp(defineComponent(() => () => div())).mount('#app')
 ```
+
+**Emits type inference levels:**
+
+| `emits` style                           | `onXxx` handler type                     |
+| --------------------------------------- | ---------------------------------------- |
+| Array `['say']`                         | `((...args: any[]) => any) \| undefined` |
+| Object `{ say: (word: string) => ... }` | `((word: string) => any) \| undefined`   |
 
 #### React
 

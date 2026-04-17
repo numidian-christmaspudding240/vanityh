@@ -102,41 +102,56 @@ Demo.$.name(123)() // ❌ 类型错误
 export type ExtractVueProps<T> = T extends abstract new (...args: any[]) => { $props: infer P }
   ? P : {}
 
-export function defineComponent<Props, E extends EmitsOptions, EE extends string, S extends SlotsType>(
-  setup: (props: Props, ctx: SetupContext<E, S>) => RenderFunction,
-  options?: { props?: ..., emits?: E | EE[], ... }
-): DefineSetupFnComponent<Props, E, S> & {
-  $: VueComponentWithProps<ExtractVueProps<DefineSetupFnComponent<Props, E, S>>>
-} {
-  return vueDefineComponent(setup, options) as any
+// EmitsToProps：将 emits 对象转换为 onXxx 处理器类型，返回值统一为 any
+export type EmitsToProps<T extends Record<string, (...args: any[]) => any>> = {
+  [K in keyof T as `on${Capitalize<string & K>}`]: (...args: Parameters<T[K]>) => any
+}
+
+// WithDollar：根据 E 的形式选择精确路径或降级路径
+type WithDollar<R, E extends EmitsOptions> = R & {
+  $: VueComponentWithProps<
+    E extends Record<string, (...args: any[]) => any>
+      ? Omit<ExtractVueProps<R>, `on${string}`> & EmitsToProps<E>  // 对象写法：精确类型
+      : ExtractVueProps<R>                                          // 数组写法：降级到 $props
+  >
+}
+
+export function defineComponent<Props, E extends EmitsOptions, ...>(
+  setup: ...,
+  options?: { ..., emits?: E | EE[] },
+): WithDollar<DefineSetupFnComponent<Props, E, S>, E> {
+  return vueDefineComponent(setup as any, options as any) as any
 }
 ```
 
-用法（含 emits）：
+用法（两种 emits 写法均支持）：
 
 ```typescript
-type MyEmits = { say: (word: string) => void }
+// 数组写法：onSay 存在性有检查，参数类型为 any
+const Demo = defineComponent((props: { name: string }) => () => div(props.name), {
+  props: ['name'],
+  emits: ['say'],
+})
+Demo.$.name('Tom').onSay(() => {})() // ✅
 
-const Demo = defineComponent(
-  (props: { name: string }, { emit }: { emit: EmitFn<MyEmits> }) => {
-    return () => div(props.name)
-  },
-  { props: ['name'], emits: ['say'] },
-)
-
-Demo.$.name('Tom').onSay((word) => console.log(word))() // ✅ props + emits 均有类型检查
+// 对象写法：onSay 参数类型精确推断
+const Demo2 = defineComponent((props: { name: string }) => () => div(props.name), {
+  props: ['name'],
+  emits: { say: (word: string) => !!word },
+})
+Demo2.$.name('Tom').onSay((word) => console.log(word))() // ✅ word: string
 ```
-
-Vue 内置组件（`Transition` 等）走全局 `any`，可自由调用但无类型检查。
 
 ## 类型系统关键决策
 
-| 场景                  | 方案                                  | 原因                                  |
-| --------------------- | ------------------------------------- | ------------------------------------- |
-| 全局 `Object.$`       | `any`                                 | TS 接口属性无法访问 `this` 的具体类型 |
-| Preact/React 组件 `$` | `defineComponent` 纯类型包装          | 函数泛型可推断 Props                  |
-| Vue 组件 `$`          | 镜像 setup 重载 + `abstract new` 提取 | Vue 组件类型通过 `$props` 暴露        |
-| Vue 内置组件 `$`      | 全局 `any`                            | 模块增强中无法使用 `this` 多态        |
+| 场景                       | 方案                                                        | 原因                                                  |
+| -------------------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| 全局 `Object.$`            | `any`                                                       | TS 接口属性无法访问 `this` 的具体类型                 |
+| Preact/React 组件 `$`      | `defineComponent` 纯类型包装                                | 函数泛型可推断 Props                                  |
+| Vue 组件 `$`（数组 emits） | `ExtractVueProps<R>`（来自 `$props`）                       | `$props` 已包含 `onXxx`，参数为 `any`                 |
+| Vue 组件 `$`（对象 emits） | `Omit<ExtractVueProps<R>, 'on${string}'> & EmitsToProps<E>` | `E` 携带精确参数类型，覆盖 `$props` 中的 `any` 版本   |
+| Vue 内置组件 `$`           | 全局 `any`                                                  | 模块增强中无法使用 `this` 多态                        |
+| `EmitsToProps` 返回值      | 统一为 `any`                                                | handler 返回值无意义，避免 validator 签名污染用户代码 |
 
 ## 懒加载组件
 

@@ -113,31 +113,45 @@ VanityH 为 Vue、React 和 Preact 提供一流的适配层，支持完整的 Ty
 
 ```typescript
 import vanity, { defineComponent } from 'vanity-h/vue'
-import { createApp, type EmitFn } from 'vue'
+import { createApp } from 'vue'
 
 const { div } = vanity
 
-type MyEmits = { say: (word: string) => void }
-
+// 方式 A：数组 emits — 事件处理器存在性有检查，但参数类型为 any
 const MyComp = defineComponent(
-  (props: { name: string; age: number }, { emit }: { emit: EmitFn<MyEmits> }) => {
+  (props: { name: string; age: number }) => {
     return () => div.class('demo')(props.name, props.age)
   },
   { props: ['name', 'age'], emits: ['say'] },
 )
 
-const App = defineComponent(() => {
-  return () =>
-    div(
-      MyComp.$.name('Tom')
-        .age(20)
-        .onSay((word) => console.log(word))(), // ✅ 类型正确
-      MyComp.$.name(123)(), // ❌ 类型错误：number 不能赋值给 string
-    )
-})
+MyComp.$.name('Tom')
+  .age(20)
+  .onSay(() => {})() // ✅ onSay 存在且有检查
 
-createApp(App).mount('#app')
+// 方式 B：对象 emits — 完整参数类型推断
+const MyComp2 = defineComponent(
+  (props: { name: string }) => {
+    return () => div(props.name)
+  },
+  {
+    props: ['name'],
+    emits: { say: (word: string) => !!word },
+  },
+)
+
+MyComp2.$.name('Tom').onSay((word) => console.log(word))() // ✅ word: string
+MyComp2.$.name(123)() // ❌ 类型错误
+
+createApp(defineComponent(() => () => div())).mount('#app')
 ```
+
+**Emits 类型推断精度对比：**
+
+| `emits` 写法                          | `onXxx` 处理器类型                       |
+| ------------------------------------- | ---------------------------------------- |
+| 数组 `['say']`                        | `((...args: any[]) => any) \| undefined` |
+| 对象 `{ say: (word: string) => ... }` | `((word: string) => any) \| undefined`   |
 
 #### React
 
